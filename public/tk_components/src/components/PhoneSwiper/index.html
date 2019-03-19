@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>演示：兼容移动端和PC端的图片滑动切换展示库：PhotoSwipe</title>
+		<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/demo.css">
+		<link rel="stylesheet" href="css/photoswipe.css">
+		<link rel="stylesheet" href="css/default-skin/default-skin.css">
+		<script src="js/photoswipe.min.js"></script>
+		<script src="js/photoswipe-ui-default.min.js"></script>
+		<style>
+
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<header>
+				<div class="row">
+					<div class="col-md-3 col-xs-12">
+						<h1 class="logo"><a href="http://www.helloweba.com" title="返回helloweba首页">helloweba</a></h1></div>
+				</div>
+			</header>
+			<div class="row main">
+				<div class="col-md-12">
+					<h2 class="top_title"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span><a href="http://www.helloweba.com/view-blog-460.html">兼容移动端和PC端的图片滑动切换展示库：PhotoSwipe</a></h2>
+
+					<div class="row" style="margin-top: 30px">
+						<div class="col-md-offset-2 col-sm-12">
+							<p style="padding: 10px">点击图片看看</p>
+							<div id="myphoto" rel="1">
+								<img src="images/aa.jpg" alt="">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<footer>
+				<p>Powered by helloweba.com 允许转载、修改和使用本站的DEMO，但请注明出处：
+					<a href="http://www.helloweba.com">www.helloweba.com</a>
+				</p>
+			</footer>
+		</div>
+		<!-- Root element of PhotoSwipe. Must have class pswp. -->
+		<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="pswp__bg"></div>
+			<!-- Slides wrapper with overflow:hidden. -->
+			<div class="pswp__scroll-wrap">
+				<!-- Container that holds slides. PhotoSwipe keeps only 3 slides in DOM to save memory. -->
+				<div class="pswp__container">
+					<!-- don't modify these 3 pswp__item elements, data is added later on -->
+					<div class="pswp__item"></div>
+					<div class="pswp__item"></div>
+					<div class="pswp__item"></div>
+				</div>
+				<!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+				<div class="pswp__ui pswp__ui--hidden">
+					<div class="pswp__top-bar">
+						<!--  Controls are self-explanatory. Order can be changed. -->
+						<div class="pswp__counter"></div>
+						<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+						<button class="pswp__button pswp__button--share" title="Share"></button>
+
+						<div class="pswp__preloader">
+							<div class="pswp__preloader__icn">
+								<div class="pswp__preloader__cut">
+									<div class="pswp__preloader__donut"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+						<div class="pswp__share-tooltip"></div>
+					</div>
+					<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+					<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+					<div class="pswp__caption">
+						<div class="pswp__caption__center"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			var openPhotoSwipe = function() {
+				var pswpElement = document.querySelectorAll('.pswp')[0];
+				// build items array
+				var items = [{
+						src: 'images/s1.jpg',
+						w: 950,
+						h: 534,
+						title: '特斯拉Semi卡车亮相：2019年生产'
+					},
+					{
+						src: 'images/s2.jpg',
+						w: 800,
+						h: 500,
+						title: '12月3日，第四届世界互联网大会在浙江乌镇开幕。本届大会主题为“发展数字经济 促进开放共享——携手共建网络空间命运共同体”。'
+					},
+					{
+						src: 'images/s3.jpg',
+						w: 516,
+						h: 712,
+						title: '阿里巴巴菜鸟网络的无人机群组，满载湄洲岛居民下单的六箱货品，仅耗时9分钟就成功飞越海峡，为农村淘宝提供物流服务。'
+					},
+					{
+						src: 'images/s4.jpg',
+						w: 857,
+						h: 1200
+					}
+				];
+
+				// define options (if needed)
+				var options = {
+					loop: false,
+					closeOnScroll: false,
+					// history & focus options are disabled on CodePen        
+					history: true,
+					focus: true,
+					index: 2,
+
+					showAnimationDuration: 0,
+					hideAnimationDuration: 0
+
+				};
+
+				var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+				gallery.init();
+			};
+
+			var myphoto = document.getElementById('myphoto');
+			myphoto.onclick = function() {
+				var p_id = myphoto.getAttribute('rel');
+				openPhotoSwipe(p_id);
+			}
+		</script>
+	</body>
+
+</html>

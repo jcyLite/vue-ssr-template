@@ -1,0 +1,73 @@
+
+//多选
+.selects_list{
+    padding-bottom:20px;
+    .select_item{
+       .icon{
+           border-radius:3px;
+       }
+    }
+}
+//单选
+.select_list{
+    padding-bottom:20px;
+    margin-top:10px;
+}
+.select_item{
+    position:relative;
+    height:30px;
+    text-align: left;
+    line-height:20px;
+    padding-top:5px;
+    &.active{
+        .icon{
+             background:#278ADD;
+             border: 1px solid #278ADD;
+            svg{
+                display: block;
+            }
+        }
+    }
+    .text{
+        vertical-align: middle;
+         display:inline-block;
+         margin-left:30px;
+         line-height:20px;
+         height:20px;
+    }
+    .icon{
+       vertical-align: middle;
+        line-height:20px;
+        border:1px solid #ddd;
+        border-radius:50%;
+        margin-left:30px;
+        display:inline-block;
+        width:20px;
+        height:20px;
+        left:20px;
+       
+        svg{
+            line-height:20px;
+            display:inline-block;
+            display: none;
+            animation: pot_mymove .3s;
+            width:13px;
+            height:13px;
+            margin-left:3px;
+            margin-top:3px;
+        }
+    }
+}
+.pot-dialog-main{
+    .pot-detail{
+        line-height:30px;
+    }
+}
+@keyframes pot_mymove{
+    from{
+        transform: scale(0,0);
+    }
+    to{
+        transform: scale(1,1);
+    }
+}

@@ -1,0 +1,10 @@
+{
+	"project_name":"thank-ui",
+	"rem":16,
+	"auto_open_browser":false,
+	"postCss":true,
+	"entry":"Index",
+	"commonJs":"base",
+	"port":1003,
+	"compress":false
+}

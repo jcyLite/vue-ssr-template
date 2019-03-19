@@ -1,0 +1,125 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?7ttoem');
+  src:  url('fonts/icomoon.eot?7ttoem#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?7ttoem') format('truetype'),
+    url('fonts/icomoon.woff?7ttoem') format('woff'),
+    url('fonts/icomoon.svg?7ttoem#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-plus:before {
+  content: "\e900";
+}
+.icon-minus:before {
+  content: "\e901";
+}
+.icon-add-outline:before {
+  content: "\e902";
+}
+.icon-checkmark:before {
+  content: "\e903";
+}
+.icon-cheveron-left:before {
+  content: "\e904";
+}
+.icon-cheveron-right:before {
+  content: "\e905";
+}
+.icon-close:before {
+  content: "\e906";
+}
+.icon-stand-by:before {
+  content: "\e907";
+}
+.icon-view-show:before {
+  content: "\e908";
+}
+.icon-home3:before {
+  content: "\e909";
+}
+.icon-camera:before {
+  content: "\e90f";
+}
+.icon-mic:before {
+  content: "\e91e";
+}
+.icon-folder:before {
+  content: "\e92f";
+}
+.icon-qrcode:before {
+  content: "\e938";
+}
+.icon-location2:before {
+  content: "\e948";
+}
+.icon-bubble:before {
+  content: "\e96b";
+}
+.icon-user:before {
+  content: "\e971";
+}
+.icon-spinner2:before {
+  content: "\e97b";
+}
+.icon-spinner7:before {
+  content: "\e980";
+}
+.icon-spinner9:before {
+  content: "\e982";
+}
+.icon-spinner10:before {
+  content: "\e983";
+}
+.icon-search:before {
+  content: "\e986";
+}
+.icon-lock:before {
+  content: "\e98f";
+}
+.icon-cog:before {
+  content: "\e994";
+}
+.icon-bin:before {
+  content: "\e9ac";
+}
+.icon-menu:before {
+  content: "\e9bd";
+}
+.icon-download3:before {
+  content: "\e9c7";
+}
+.icon-star-empty:before {
+  content: "\e9d7";
+}
+.icon-star-full:before {
+  content: "\e9d9";
+}
+.icon-play3:before {
+  content: "\ea1c";
+}
+.icon-volume-medium:before {
+  content: "\ea27";
+}
+.icon-appleinc:before {
+  content: "\eabe";
+}
+.icon-android:before {
+  content: "\eac0";
+}

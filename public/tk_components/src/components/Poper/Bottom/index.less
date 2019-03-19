@@ -1,0 +1,59 @@
+@import './veriable.less';
+.bottom{
+    .shade{
+        background:rgba(0,0,0,.3);
+        position:fixed;
+        left:0;
+        right:0;
+        bottom:0;
+        top:0;
+        z-index: 19910703;
+        animation: .3s sm;
+        .shade-box{
+            transition:.3s all;
+           transform: translateY(0);
+        }
+    }
+}
+.bottom.active{
+    .shade{
+        animation: .3s ms;
+        .shade-box{
+           transform: translateY(250px);
+        }
+    }
+}
+.shade{
+    .shade-box{
+        position:absolute;
+        bottom:0;
+        height:200px;
+        width:100%;
+        .bottom-content{
+            border-radius:10px;
+            overflow: hidden;
+            width:95%;
+            margin:auto;
+            div{
+                background:#fff;
+                height:55px;
+                font-size:20px;
+                text-align: center;
+                line-height: 55px;
+                margin-top:1px;
+            }
+        }
+        .bottom-cancel{
+            font-size:20px;
+            border-radius:10px;
+            height:55px;
+            line-height: 55px;
+            width:95%;
+            margin:auto;
+            text-align: center;
+            background:#fff;
+            margin-top:20px;
+        }
+    }
+}
+

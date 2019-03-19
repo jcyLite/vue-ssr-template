@@ -3,19 +3,28 @@ import App from './App.vue'
 import { createStore } from './store'
 import { createRouter } from './router'
 import { sync } from 'vuex-router-sync'
-import titleMixin from './util/title'
-import * as filters from './util/filters'
-
-// mixin for handling title
-Vue.mixin(titleMixin)
-
-// register global utility filters.
-Object.keys(filters).forEach(key => {
-  Vue.filter(key, filters[key])
-})
-
-// Expose a factory function that creates a fresh set of store, router,
-// app instances on each call (which is called for each SSR request)
+import Vconsole from 'vconsole';
+new Vconsole();
+function install_cordova(){
+	if(window.navigator.platform!='Win32'){
+		var isAndroid=/Android/.test(navigator.userAgent);
+		var isIos =/iPhone/.test(navigator.userAgent);
+		Vue.prototype.isAndroid=isAndroid;
+		Vue.prototype.isIos=isIos;
+		var body=document.getElementsByTagName('body')[0];
+		var script=document.createElement('script');
+		script.type="text/javascript";
+		script.charset="GBK";
+		if(isIos){
+			script.src="./static/cordova/cordova-ios/cordova.js";
+		}else if(isAndroid){
+			script.src="./static/cordova/cordova-android/cordova.js";
+		}
+//		script.src="./static/cordova/cordova-android/cordova.js";
+		body.appendChild(script);
+		
+	}
+}
 export function createApp () {
   // create store and router instances
   const store = createStore()
@@ -23,14 +32,15 @@ export function createApp () {
 
   // sync the router with the vuex store.
   // this registers `store.state.route`
-  sync(store, router)
-
+  sync(store, router);
   // create the app instance.
   // here we inject the router, store and ssr context to all child components,
   // making them available everywhere as `this.$router` and `this.$store`.
   const app = new Vue({
     router,
     store,
+    mounted(){
+   }, 
     render: h => h(App)
   })
 

@@ -10,9 +10,6 @@ const { createBundleRenderer } = require('vue-server-renderer')
 
 const isProd = process.env.NODE_ENV === 'production'
 const useMicroCache = process.env.MICRO_CACHE !== 'false'
-const serverInfo =
-  `express/${require('express/package.json').version} ` +
-  `vue-server-renderer/${require('vue-server-renderer/package.json').version}`
 
 const app = express()
 
@@ -50,7 +47,7 @@ if (isProd) {
 } else {
   // In development: setup the dev server with watch and hot-reload,
   // and create a new renderer on bundle / index template update.
-  readyPromise = require('./build/setup-dev-server')(
+  readyPromise = require('./config/setup-dev-server')(
     app,
     templatePath,
     (bundle, options) => {
@@ -62,12 +59,10 @@ if (isProd) {
 const serve = (path, cache) => express.static(resolve(path), {
   maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 30 : 0
 })
-
-app.use(compression({ threshold: 0 }))
-app.use(favicon('./public/logo-48.png'))
+app.use('/static',express.static(path.resolve(__dirname, 'static')))
+//app.use(compression({ threshold: 0 }))
 app.use('/dist', serve('./dist', true))
-app.use('/public', serve('./public', true))
-app.use('/manifest.json', serve('./manifest.json', true))
+//app.use('/manifest.json', serve('./manifest.json', true))
 app.use('/service-worker.js', serve('./dist/service-worker.js'))
 
 // since this app has no user-specific content, every page is micro-cacheable.
@@ -82,7 +77,6 @@ function render (req, res) {
   const s = Date.now()
 
   res.setHeader("Content-Type", "text/html")
-  res.setHeader("Server", serverInfo)
 
   const handleError = err => {
     if (err.url) {
@@ -98,7 +92,7 @@ function render (req, res) {
   }
 
   const context = {
-    title: 'Vue-ssr-dome', // default title
+    title: 'Vue SSR', // default title
     url: req.url
   }
   renderer.renderToString(context, (err, html) => {

@@ -1,0 +1,11 @@
+{
+	"project_name":"example",
+	"rem":16,
+	"auto_open_browser":false,
+	"postCss":true,
+	"entry":"Index",
+	"commonJs":"base",
+	"port":2003,
+	"static":true,
+	"compress":false
+}
