@@ -9,7 +9,7 @@ export function createRouter () {
     fallback: false,
     scrollBehavior: () => ({ y: 0 }),
     routes: [
-      { path: '', component: ()=>import('../page/hello.vue')},
+      { path: '', component: ()=>import('../page/main.vue')},
       {
       	path:'/add',
       	component:()=>import('../page/add.vue')

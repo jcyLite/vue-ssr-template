@@ -3,7 +3,6 @@
 		<div class="header">
 			add
 		</div>
-		<tk-upload-photo v-model="a"></tk-upload-photo>
 	</div>
 </template>
 

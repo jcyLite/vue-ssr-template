@@ -3,28 +3,6 @@ import App from './App.vue'
 import { createStore } from './store'
 import { createRouter } from './router'
 import { sync } from 'vuex-router-sync'
-import Vconsole from 'vconsole';
-new Vconsole();
-function install_cordova(){
-	if(window.navigator.platform!='Win32'){
-		var isAndroid=/Android/.test(navigator.userAgent);
-		var isIos =/iPhone/.test(navigator.userAgent);
-		Vue.prototype.isAndroid=isAndroid;
-		Vue.prototype.isIos=isIos;
-		var body=document.getElementsByTagName('body')[0];
-		var script=document.createElement('script');
-		script.type="text/javascript";
-		script.charset="GBK";
-		if(isIos){
-			script.src="./static/cordova/cordova-ios/cordova.js";
-		}else if(isAndroid){
-			script.src="./static/cordova/cordova-android/cordova.js";
-		}
-//		script.src="./static/cordova/cordova-android/cordova.js";
-		body.appendChild(script);
-		
-	}
-}
 export function createApp () {
   // create store and router instances
   const store = createStore()
