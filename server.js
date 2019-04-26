@@ -110,7 +110,7 @@ app.get('*', isProd ? render : (req, res) => {
   readyPromise.then(() => render(req, res))
 })
 
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 8081
 app.listen(port, () => {
   console.log(`server started at localhost:${port}`)
 })

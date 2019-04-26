@@ -3,6 +3,7 @@ import App from './App.vue'
 import { createStore } from './store'
 import { createRouter } from './router'
 import { sync } from 'vuex-router-sync'
+
 export function createApp () {
   // create store and router instances
   const store = createStore()
@@ -17,8 +18,7 @@ export function createApp () {
   const app = new Vue({
     router,
     store,
-    mounted(){
-   }, 
+    mounted(){},
     render: h => h(App)
   })
 
