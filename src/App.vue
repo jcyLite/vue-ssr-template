@@ -3,7 +3,8 @@
 </style>
 <template>
 	<div id="app">
-		<div class="leftBox">
+		<leftSearch v-model="noSearch" class="leftBox"></leftSearch>
+		<div v-show="noSearch" class="leftBox">
 			<div class="top">
 				<div>
 					事件大类：
@@ -75,7 +76,7 @@
 			</div>
 			<div v-show="searchShow" class="search">
 				<input type="text" />
-				<span style="cursor: pointer;" @click="searchShow=false">搜索</span>
+				<span style="cursor: pointer;" @click="search">搜索</span>
 			</div>
 			<div id="mapDiv"></div>
 			<poper-bottom :d="d[active]" v-model=cksxbd></poper-bottom>
@@ -84,12 +85,14 @@
 </template>
 <script>
 	import './components/dialog.less';
-	import poperBottom from './components/poperBottom.vue'
+	import poperBottom from './components/poperBottom.vue';
+	import leftSearch from './components/leftSearch.vue'
 	var $ = require('jquery');
 	export default {
-		components:{poperBottom},
+		components:{poperBottom,leftSearch},
 		data() {
 			return {
+				noSearch:true,
 				poperChangeName:false,
 				active:-1,
 				cksxbd:false,
@@ -175,6 +178,10 @@
 			})
 		},
 		methods: {
+			search(){
+				this.searchShow=false;
+				this.noSearch=false;
+			},
 			fiter(){
 				this.$createFiter().show()
 			},
