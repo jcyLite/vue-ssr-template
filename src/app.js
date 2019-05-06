@@ -3,6 +3,16 @@ import App from './App.vue'
 import { createStore } from './store'
 import { createRouter } from './router'
 import { sync } from 'vuex-router-sync'
+import CreateAPI from 'vue-create-api'
+Vue.use(CreateAPI)
+
+import changeName from './components/changeName.vue'
+import add from './components/add.vue'
+import filter from './components/fiter.vue'
+Vue.createAPI(changeName,true)
+Vue.createAPI(add,true)
+Vue.createAPI(filter,true)
+
 
 export function createApp () {
   // create store and router instances

@@ -53,6 +53,9 @@ module.exports = [
 		}
 	},
 	{
+		
+	},
+	{
 		test:/\.(styl|stylus)$/,
 		use: isProd ?
 			ExtractTextPlugin.extract({
@@ -67,6 +70,10 @@ module.exports = [
 				fallback: 'vue-style-loader'
 			}) :
 			['vue-style-loader', 'css-loader', 'stylus-loader']
+	},
+	{
+		test: /\.css$/,
+		loader: 'css-loader'
 	},
 	{
 		test: /\.less$/,

@@ -20,19 +20,24 @@
 						共{{d.length}}个图层
 					</div>
 					<div>
-						<img src="./img/filter.png" alt="" />
+						<img @click="fiter" src="./img/filter.png" alt="" />
 						<img @click="addatuceng" src="./img/addb.png" alt="" />
 						<img @click="d=[]" src="./img/huishou.png" alt="" />
 					</div>
 				</div>
 				<div class="container">
-					<div class="box" v-for="item,index of d">
+					<div :class="{active:active==index}" @click="active=index,jiazhai(item,index)" class="box" v-for="item,index of d">
 						<div class="t">
-							<span>
-								{{item.tname}}
-							</span>
+							<div @click="(eye.indexOf(index)==-1)?(eye.push(index)):(eye.splice(eye.indexOf(index),1)),jeye(item,index)" class="eye">
+								<img v-if="eye.indexOf(index)==-1" src="./img/eye.png" alt="" />
+								<img v-if="eye.indexOf(index)!=-1" src="./img/eye_active.png" alt="" />
+							</div>
+							<div class="contenteditable">
+								
+								{{item.tname }}
+							</div>
 							<div class="u">
-								<img  src="./img/edit.png" alt="" />
+								<img @click="changeName(item,index)"  src="./img/edit.png" alt="" />
 								<img src="./img/detail.png" alt="" />
 								<img src="./img/earth.png" alt="" />
 								<img @click="d.splice(index,1)" src="./img/hsz.png" alt="" />
@@ -73,56 +78,20 @@
 				<span style="cursor: pointer;" @click="searchShow=false">搜索</span>
 			</div>
 			<div id="mapDiv"></div>
-			<div v-show="cksxbd" class="cksxb">
-				<div @click="cksxbd=false" class="close">X</div>
-			</div>
-		</div>
-		<div v-show="poper" class="poper">
-			<div @click="poper=false" class="shade"></div>
-			<div class="box">
-				<div class="scroller">
-					<div class="row">
-						<div class="col">图层名称：</div>
-						<input v-model="poperData.tcmc" class="col" type="text" />
-					</div>
-					<div class="row">
-						<div class="col">图层类型：</div>
-						<select v-model="poperData.tclx" placeholder="请选择" class="col" name="" id="">
-							<option value="dian">点</option>
-							<option value="xian">线</option>
-							<option value="mian">面</option>
-						</select>
-					</div>
-					<div class="row">
-						<div v-model="poperData.jcsjlx" class="col">基础数据类型：</div>
-						<input class="col" type="text" />
-					</div>
-					<div class="row">
-						<div class="col">所属网格类型：</div>
-						<select v-model="poperData.sswglx" placeholder="请选择" class="col" name="" id="">
-							<option value="请选择">行政区划网格</option>
-							<option value="请选择">考评工作网格</option>
-						</select>
-					</div>
-					<div class="row">
-						<div class="col">描述：</div>
-						<input v-model="poperData.ms" class="col" type="text" />
-					</div>
-				</div>
-				<div class="buttons">
-					<div @click="poper=false" click="btna" class="button-1">取消</div>
-					<div click="addbtuceng" class="button-2">确定</div>
-				</div>
-			</div>
+			<poper-bottom :d="d[active]" v-model=cksxbd></poper-bottom>
 		</div>
 	</div>
 </template>
 <script>
 	import './components/dialog.less';
+	import poperBottom from './components/poperBottom.vue'
 	var $ = require('jquery');
 	export default {
+		components:{poperBottom},
 		data() {
 			return {
+				poperChangeName:false,
+				active:-1,
 				cksxbd:false,
 				poper: false,
 				map: null,
@@ -136,19 +105,28 @@
 				searchShow:false,
 				d: [],
 				contents: [],
-				poperData:{
-					tcmc:'',
-					tclx:'',
-					jcsjlx:'',
-					sswglx:'',
-					ms:''
-				}
+				eye:[],
+				tlayer:[]
 			}
 		},
 		mounted() {
+			window.uu=this;
+			var that=this;
 			//读取后台数据
+			window.$=require('jquery')
 			this.$http.post('/tuceng',{}).then(d=>{
 				this.d=d;
+				d.forEach((item,index)=>{
+					var a;
+					if(item.tleixing=='dian'){
+						a=this.jzdian(item.data,item.tid);
+					}else if(item.tleixing=='xian'){
+						a=this.jzxian(item.data,item.tid);
+					}else if(item.tleixing=='mian'){
+						a=this.jzmian(item.data,item.tid);
+					}
+					this.tlayer.push(a);
+				})
 			})
 			this.map = new T.Map("mapDiv");
 			window.map = this.map;
@@ -157,7 +135,7 @@
 			//创建缩放平移控件对象
 			this.control = new T.Control.Zoom();
 			//添加缩放平移控件
-			this.map.addControl(this.control);
+//			this.map.addControl(this.control);
 			this.infoWin1 = new T.InfoWindow();
 			this.markerTool = new T.MarkTool(this.map, {
 				follow: true
@@ -172,6 +150,11 @@
 				for(var i = 0; i < markers.length; i++) {
 					let marker = markers[i]
 					marker.openInfoWindow(infoWin1);
+					that.scbc(marker)
+					marker.addEventListener('click',function(obj){
+						that.markerClick(this,obj)
+					})
+					
 				}
 			})
 			var config = {
@@ -192,21 +175,180 @@
 			})
 		},
 		methods: {
+			fiter(){
+				this.$createFiter().show()
+			},
+			changeName(item){//更改图层名称
+				var that=this;
+				this.$createChangeName({
+					$props: {
+					    data:item.tname
+					},
+					$events:{
+						confirm(data){
+							item.tname=data;
+							that.$http.post('changeName',{tid:item.tid,tname:data})
+						}
+					}
+				}).show()
+			},
+			markerClick(marker,obj){//点击标注时触发事件
+				var that=this;
+				var lnglat=obj.lnglat;
+				var sContent = require('./components/dialog.tpl')();
+				var InfoContent=new T.InfoWindow();
+				InfoContent.setContent(sContent);
+				marker.openInfoWindow(InfoContent,lnglat);
+				$(()=>{
+					that.scbc(marker)
+				})
+			},
+			scbc(overLay,type){
+				var that=this;
+				$('.buttons .sc').click(function(){//点击删除
+					that.$http.post('/del',{
+						bid:overLay.bid,
+						tid:overLay.tid
+					})
+					that.map.removeOverLay(overLay);
+					that.map.closeInfoWindow()
+				})
+				$('.buttons .bc').click(function(){//点击保存
+					if(!type){//点
+						console.log(overLay.getLngLat())
+					}else if(type=='xian'){
+						console.log(overLay.getLngLats())
+					}
+				})
+			},
+			jzdian(data,tid){
+				var lx=0,ly=0;
+				var that=this;
+				var tlayers=[];
+				console.log(data.tid);
+				data.forEach(item=>{
+					var x=item.lnglat.x;
+					var y=item.lnglat.y;
+					lx+=parseFloat(x);
+					ly+= parseFloat(y);
+					var marker=new T.Marker(new T.LngLat(parseFloat(x), parseFloat(y)));
+					marker.bid=item.bid;
+					marker.tid=tid;
+					marker.addEventListener('click',function(obj){
+						that.markerClick(this,obj)
+					})
+					this.map.addOverLay(marker)
+					marker.hide();
+					tlayers.push(marker)
+				})
+				var px=lx/data.length;
+				var py=ly/data.length;
+				return {
+					tlayers,
+					p:{px,py}
+				};
+			},
+			jzxian(data,tid){
+				var that=this;
+				var lx=0,ly=0,bb=0;
+				var tlayers=[];
+				data.forEach(item=>{
+					var points=[];
+					item.lnglat.forEach(ii=>{
+						lx+=parseFloat(ii.x);
+						ly+=parseFloat(ii.y);
+						bb++;
+						points.push(new T.LngLat(parseFloat(ii.x),parseFloat(ii.y)))
+					})
+					var pointers=new T.Polyline(points);
+					pointers.bid=item.bid;
+					pointers.tid=tid;
+					pointers.addEventListener('click',function(obj){
+						var lnglat=obj.lnglat;
+						var sContent = require('./components/dialog.tpl')();
+						var InfoContent=new T.InfoWindow();
+						InfoContent.setContent(sContent);
+						that.map.openInfoWindow(InfoContent,lnglat);
+						that.scbc(this,'xian')
+					})
+					this.map.addOverLay(pointers)
+					pointers.hide();
+					tlayers.push(pointers)
+				})
+				console.log(lx)
+				var px=lx/bb;
+				var py=ly/bb;
+				return {
+					tlayers,
+					p:{px,py}
+				};
+			},
+			jzmian(data,tid){
+				var lx=0,ly=0,bb=0;
+				var tlayers=[];
+				data.forEach(item=>{
+					var points=[];
+					item.lnglat.forEach(ii=>{
+						lx+=parseFloat(ii.x);
+						ly+=parseFloat(ii.y);
+						bb++;
+						points.push(new T.LngLat(parseFloat(ii.x),parseFloat(ii.y)))
+					})
+					var polygons=new T.Polygon(points,{
+		                color: "blue", weight: 3, opacity: 0.5, fillColor: "#FFFFFF", fillOpacity: 0.5
+		            });
+		            polygons.bid=item.bid;
+		            polygons.tid=tid;
+					polygons.addEventListener('click',function(obj){
+						var lnglat=obj.lnglat;
+						var sContent = require('./components/dialog.tpl')();
+						var InfoContent=new T.InfoWindow();
+						InfoContent.setContent(sContent);
+						that.map.openInfoWindow(InfoContent,lnglat);
+						that.scbc(this,'xian')
+					})
+					this.map.addOverLay(polygons);
+					polygons.hide();
+					tlayers.push(polygons)
+				})
+				var px=lx/bb;
+				var py=ly/bb;
+				
+				return {
+					tlayers,
+					p:{px,py}
+				};
+			},
+			jeye(item,index){//眼睛
+				var a=this.tlayer[index]
+				if(this.eye.indexOf(index)!=-1){
+					a.tlayers.forEach((item,index)=>{
+						item.show()
+					})
+				}else{
+					a.tlayers.forEach((item,index)=>{
+						item.hide()
+					})
+				}
+			},
+			jiazhai(i,index){//地图位移
+				var a=this.tlayer[index];
+				var px=a.p.px;
+				var py=a.p.py;
+				this.map.centerAndZoom(new T.LngLat(px,py), this.zoom);
+			},
 			cksxb(){
 				this.cksxbd=true;
+			},
+			contenteditable(item){
+				this.$http.post('/changeName',{tname:item.tname,tid:item.tid}).then(d=>{
+					
+				})
 			},
 			btna() {
 				var markers = this.markerTool.getMarkers();
 				this.map.removeOverLay(markers[markers.length - 1]);
-
-			},
-			btnb() {
-
-			},
-			btnadd() {
-				require('./components/add.less')
-				var addtpl = require('./components/add.tpl')();
-				$('body').append(addtpl);
+				this.map.closeInfoWindow()
 			},
 			shadea() {
 				$('.cpt-add').remove()
@@ -226,15 +368,45 @@
 				this.markerTool.open();
 			},
 			openPolylineTool() {
+				var that=this;
 				var handler = this.handler;
 				if(handler) handler.close();
 				handler = new T.PolylineTool(this.map);
+				handler.addEventListener('draw',function(obj){
+					var currentLnglats=obj.currentLnglats;
+					var lnglat=currentLnglats[currentLnglats.length-1];
+					var sContent = require('./components/dialog.tpl')();
+					var InfoContent=new T.InfoWindow();
+					InfoContent.setContent(sContent);
+					that.map.openInfoWindow(InfoContent,lnglat);
+					that.scbc(obj.currentPolyline,'xian')
+					obj.currentPolyline.addEventListener('click',()=>{
+						var InfoContent=new T.InfoWindow();
+						InfoContent.setContent(sContent);
+						that.map.openInfoWindow(InfoContent,lnglat);
+					})
+				})
 				handler.open();
 			},
 			openPolygonTool() {
+				var that=this;
 				var handler = this.handler;
 				if(handler) handler.close();
 				handler = new T.PolygonTool(this.map);
+				handler.addEventListener('draw',function(obj){
+					var currentLnglats=obj.currentLnglats;
+					var lnglat=currentLnglats[currentLnglats.length-1];
+					var sContent = require('./components/dialog.tpl')();
+					var InfoContent=new T.InfoWindow();
+					InfoContent.setContent(sContent);
+					that.map.openInfoWindow(InfoContent,lnglat);
+					that.scbc(obj.currentPolygon,'xian')
+					obj.currentPolygon.addEventListener('click',()=>{
+						var InfoContent=new T.InfoWindow();
+						InfoContent.setContent(sContent);
+						that.map.openInfoWindow(InfoContent,lnglat);
+					})
+				})
 				handler.open();
 			},
 			openRectangleTool() { //绘制矩形
@@ -272,16 +444,24 @@
 			},
 			//添加一个图层
 			addatuceng() {
-				this.poper = true;
-			},
-			addbtuceng(){
-				if(!this.poperData.tcmc){
-					alert('未填写图层名称');
-					return;
-				}
-				this.d.push(this.poperData);
-				this.poperData={};
-				this.poper = false;
+				var that=this;
+				this.$createAdd({
+					$events:{
+						addbtuceng(poperData){
+							console.log(poperData)
+							if(!poperData.tname){
+								alert('未填写图层名称');
+								return;
+							}
+							that.$http.post('/addBegin',{
+								data:poperData
+							}).then(d=>{
+								
+							})
+							window.location.reload();
+						}
+					}
+				}).show()
 			}
 		}
 	}

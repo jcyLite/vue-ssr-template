@@ -1,0 +1,81 @@
+.box{
+    width:300px;
+    overflow: hidden;
+    height:250px;
+   
+}
+.scroller{
+   height:200px;
+   width:300px; 
+   overflow-y: scroll;
+}
+.row{
+    .col{
+        float:left;
+    }
+    div{
+        width:80px;
+        line-height:22px;
+        text-align: right;
+    }
+    input{
+        vertical-align: middle;
+        width:180px;
+        height:20px;
+    }
+    select{
+         vertical-align: middle;
+        height:25px;
+        width:180px;
+    }
+    &::after{
+        clear:both;
+    }
+    height:30px;
+    width:280px;
+}
+.buttons{
+    position:absolute;
+    bottom:30px;
+    right:20px;
+    display: flex;
+    float:right;
+    margin-top:20px;
+    .button-0{
+        width:70px;
+        height:30px;
+        border:1px solid #333;
+        border-radius:3px;
+        text-align: center;
+        line-height:30px;
+        box-sizing: border-box;
+        margin-right:50px;
+    }
+    .button-1{
+        cursor:pointer;
+        width:70px;
+        height:30px;
+        text-align: center;
+        line-height:30px;
+        border-radius:3px;
+        border:1px solid #333;
+        box-sizing: border-box;
+        margin-right:20px;
+    }
+    .button-2{
+        cursor:pointer;
+        color:#fff;
+        width:70px;
+        height:30px;
+        text-align: center;
+        line-height:30px;
+        border-radius:3px;
+        background:#007BC4;
+    }
+}
+.icon-add{
+    width:30px;
+    position:absolute;
+    bottom:30px;
+    left:20px;
+}
