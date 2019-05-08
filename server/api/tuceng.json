@@ -13,7 +13,7 @@
 					"y": "39.9068"
 				},
 				"szxzq": "所在行政区",
-				"bjmc": "部件名称",
+				"bjmc": "窨井盖a",
 				"bjbzm": "部件标识码"
 			}, {
 				"bid": "iio",
@@ -22,7 +22,7 @@
 					"y": "39.9168"
 				},
 				"szxzq": "所在行政区",
-				"bjmc": "部件名称",
+				"bjmc": "窨井盖b",
 				"bjbzm": "部件标识码"
 			}
 		],
@@ -127,5 +127,11 @@
 		"jcsjlx": "b",
 		"sswglx": "b",
 		"miaoshu": "这条路马上要修理了"
+	}, {
+		"tname": "qwedwe",
+		"tleixing": "xian",
+		"jcsjlx": "",
+		"sswglx": "请选择",
+		"miaoshu": ""
 	}
 ]

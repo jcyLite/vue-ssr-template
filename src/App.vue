@@ -39,7 +39,7 @@
 							</div>
 							<div class="u">
 								<img @click="changeName(item,index)"  src="./img/edit.png" alt="" />
-								<img src="./img/detail.png" alt="" />
+								<img @click="poperDetail(item,index)" src="./img/detail.png" alt="" />
 								<img src="./img/earth.png" alt="" />
 								<img @click="d.splice(index,1)" src="./img/hsz.png" alt="" />
 							</div>
@@ -94,7 +94,7 @@
 			return {
 				noSearch:true,
 				poperChangeName:false,
-				active:-1,
+				active:0,
 				cksxbd:false,
 				poper: false,
 				map: null,
@@ -176,8 +176,16 @@
 				var method = $(this).attr('click');
 				that[method] ? that[method].call(this, e) : '';
 			})
+			
 		},
 		methods: {
+			poperDetail(data){
+				this.$createPoperDetail({
+					$props:{
+						data
+					}
+				}).show();
+			},
 			search(){
 				this.searchShow=false;
 				this.noSearch=false;
@@ -223,6 +231,9 @@
 				$('.buttons .bc').click(function(){//点击保存
 					if(!type){//点
 						console.log(overLay.getLngLat())
+						that.$http.post('/save',{
+							
+						})
 					}else if(type=='xian'){
 						console.log(overLay.getLngLats())
 					}

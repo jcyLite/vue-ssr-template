@@ -9,9 +9,11 @@ Vue.use(CreateAPI)
 import changeName from './components/changeName.vue'
 import add from './components/add.vue'
 import filter from './components/fiter.vue'
+import poperDetail from './components/poperDetail.vue'
 Vue.createAPI(changeName,true)
 Vue.createAPI(add,true)
 Vue.createAPI(filter,true)
+Vue.createAPI(poperDetail,true)
 
 
 export function createApp () {
