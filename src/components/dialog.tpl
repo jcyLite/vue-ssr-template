@@ -1,50 +1,50 @@
-<div class="box">
+<div class="box dialogb">
 	<div class="scroller">
 	    <div class="row">
 	    	<div class="col">所在行政区：</div>
-	    	<select placeholder="请选择" class="col" name="" id="">
+	    	<select disabled="true" placeholder="请选择" class="col" name="" id="">
 	    		<option  value="请选择"></option>
 	    	</select>
 	    </div>
 	    <div class="row">
 	    	<div class="col">所在网格：</div>
-	    	<input class="col" type="text" />
+	    	<input disabled="true" class="col" type="text" />
 	    </div>
 	    <div class="row">
 	    	<div class="col">部件标识码：</div>
-	    	<input class="col" type="text" />
+	    	<input disabled="true" class="col" type="text" />
 	    </div>
 	    <div class="row">
 	    	<div class="col">部件名称：</div>
-	    	<input class="col" type="text" />
+	    	<input disabled="true" class="col" type="text" />
 	    </div>
 	    <div class="row">
 	    	<div class="col">地址描述：</div>
-	    	<input class="col" type="text" />
+	    	<input disabled="true" class="col" type="text" />
 	    </div>
 	    <div class="row">
 	    	<div class="col">主管部门：</div>
-	    	<input class="col" type="text" />
+	    	<input disabled="true" class="col" type="text" />
 	    </div>
 	    <div class="row">
 	    	<div class="col">权属单位：</div>
-	    	<input class="col" type="text" />
+	    	<input disabled="true" class="col" type="text" />
 	    </div>
 	    <div class="row">
 	    	<div class="col">养护单位：</div>
-	    	<input class="col" type="text" />
+	    	<input disabled="true" class="col" type="text" />
 	    </div>
 	    <div class="row">
 	    	<div class="col">数据来源：</div>
-	    	<input class="col" type="text" />
+	    	<input disabled="true" class="col" type="text" />
 	    </div>
 	    <div class="row">
 	    	<div class="col">数据录入人：</div>
-	    	<input class="col" type="text" />
+	    	<input disabled="true" class="col" type="text" />
 	    </div>
 	    <div class="row">
 	    	<div class="col">备注：</div>
-	    	<input class="col" type="text" />
+	    	<input disabled="true" class="col" type="text" />
 	    </div>
 	</div>
 	<div class="buttons">

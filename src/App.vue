@@ -1,5 +1,22 @@
-<style src="./app.less" lang="less">
-
+<style lang="less">
+	@import "./app.less";
+	.search{
+		position:relative;
+		.search-icon{
+			width:20px;
+			position:absolute;
+			right:0px;
+			top:-20px;
+		}
+	}
+	.top{
+		select{
+			font-size:12px;
+			option{
+				margin-right:12px;
+			}
+		}
+	}
 </style>
 <template>
 	<div id="app">
@@ -7,12 +24,21 @@
 		<div v-show="noSearch" class="leftBox">
 			<div class="top">
 				<div>
-					事件大类：
-					<select name="" id=""></select>
+					部件大类：
+					<select v-model="dl" name="aa" id="">
+						<option value="a">a</option>
+						<option value="b">b</option>
+					</select>
 				</div>
 				<div>
-					事件小类：
-					<select name="" id=""></select>
+					部件小类：
+					<select v-model="xl" name="" id="">
+						<option value="a">a</option>
+						<option value="b">b</option>
+					</select>
+				</div>
+				<div class="search">
+					<img @click="searchlei" class="search-icon" src="./img/search.png" alt="" />
 				</div>
 			</div>
 			<div class="bottom">
@@ -86,7 +112,8 @@
 <script>
 	import './components/dialog.less';
 	import poperBottom from './components/poperBottom.vue';
-	import leftSearch from './components/leftSearch.vue'
+	import leftSearch from './components/leftSearch.vue';
+	import {markerClick,scbc} from './module.js'
 	var $ = require('jquery');
 	export default {
 		components:{poperBottom,leftSearch},
@@ -109,7 +136,9 @@
 				d: [],
 				contents: [],
 				eye:[],
-				tlayer:[]
+				tlayer:[],
+				dl:'',
+				xl:''
 			}
 		},
 		mounted() {
@@ -117,20 +146,7 @@
 			var that=this;
 			//读取后台数据
 			window.$=require('jquery')
-			this.$http.post('/tuceng',{}).then(d=>{
-				this.d=d;
-				d.forEach((item,index)=>{
-					var a;
-					if(item.tleixing=='dian'){
-						a=this.jzdian(item.data,item.tid);
-					}else if(item.tleixing=='xian'){
-						a=this.jzxian(item.data,item.tid);
-					}else if(item.tleixing=='mian'){
-						a=this.jzmian(item.data,item.tid);
-					}
-					this.tlayer.push(a);
-				})
-			})
+			
 			this.map = new T.Map("mapDiv");
 			window.map = this.map;
 			//设置显示地图的中心点和级别
@@ -157,7 +173,7 @@
 					marker.addEventListener('click',function(obj){
 						that.markerClick(this,obj)
 					})
-					
+					marker.enableDragging();
 				}
 			})
 			var config = {
@@ -179,6 +195,29 @@
 			
 		},
 		methods: {
+			searchlei(){//大类小类搜索
+				this.$http.post('/tuceng',{
+					dl:this.dl,
+					xl:this.xl
+				}).then(d=>{
+					this.d=d.data;
+					this.makeData(d.data)
+				})
+				console.log(this.dl)
+			},
+			makeData(d){
+				d.forEach((item,index)=>{
+					var a;
+					if(item.tleixing=='dian'){
+						a=this.jzdian(item.data,item.tid);
+					}else if(item.tleixing=='xian'){
+						a=this.jzxian(item.data,item.tid);
+					}else if(item.tleixing=='mian'){
+						a=this.jzmian(item.data,item.tid);
+					}
+					this.tlayer.push(a);
+				})
+			},
 			poperDetail(data){
 				this.$createPoperDetail({
 					$props:{
@@ -208,42 +247,16 @@
 				}).show()
 			},
 			markerClick(marker,obj){//点击标注时触发事件
-				var that=this;
-				var lnglat=obj.lnglat;
-				var sContent = require('./components/dialog.tpl')();
-				var InfoContent=new T.InfoWindow();
-				InfoContent.setContent(sContent);
-				marker.openInfoWindow(InfoContent,lnglat);
-				$(()=>{
-					that.scbc(marker)
-				})
+				markerClick.call(this,marker,obj)
 			},
 			scbc(overLay,type){
-				var that=this;
-				$('.buttons .sc').click(function(){//点击删除
-					that.$http.post('/del',{
-						bid:overLay.bid,
-						tid:overLay.tid
-					})
-					that.map.removeOverLay(overLay);
-					that.map.closeInfoWindow()
-				})
-				$('.buttons .bc').click(function(){//点击保存
-					if(!type){//点
-						console.log(overLay.getLngLat())
-						that.$http.post('/save',{
-							
-						})
-					}else if(type=='xian'){
-						console.log(overLay.getLngLats())
-					}
-				})
+				scbc.call(this,overLay,type);
 			},
 			jzdian(data,tid){
 				var lx=0,ly=0;
 				var that=this;
 				var tlayers=[];
-				console.log(data.tid);
+				window.activeMarkers=[];
 				data.forEach(item=>{
 					var x=item.lnglat.x;
 					var y=item.lnglat.y;
@@ -255,6 +268,7 @@
 					marker.addEventListener('click',function(obj){
 						that.markerClick(this,obj)
 					})
+					activeMarkers.push(marker);
 					this.map.addOverLay(marker)
 					marker.hide();
 					tlayers.push(marker)
@@ -270,7 +284,7 @@
 				var that=this;
 				var lx=0,ly=0,bb=0;
 				var tlayers=[];
-				data.forEach(item=>{
+				data&&data.forEach(item=>{
 					var points=[];
 					item.lnglat.forEach(ii=>{
 						lx+=parseFloat(ii.x);

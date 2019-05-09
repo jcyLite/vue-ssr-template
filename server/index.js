@@ -29,6 +29,31 @@ module.exports=function makeServer(app){
 		)
 	})
 	
+	app.post('/tuceng',bodyParser.json({limit: '10mb'}),(req,res)=>{
+		var body=req.body;
+		var dl=body.dl;
+		var xl=body.xl;
+		if(!dl||(!xl)){
+			return res.json({
+				code:400,
+				msg:'没有传数据'
+			})
+		}
+		var result=JSON.parse(fs.readFileSync(resolve("./api/tuceng.json")));
+		var arr=[];
+		result.forEach(item=>{
+			if(item.bleixingd==dl){
+				if(item.bleixingx==xl){
+					arr.push(item)
+				}
+			}
+		})
+		res.json({
+			code:400,
+			data:arr
+		})
+	})
+	
 	app.post('/del',bodyParser.json({limit: '10mb'}),(req,res)=>{
 		var body=req.body;
 		var bid=body.bid;

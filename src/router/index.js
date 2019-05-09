@@ -9,7 +9,7 @@ export function createRouter () {
     fallback: false,
     scrollBehavior: () => ({ y: 0 }),
     routes: [
-      { path: '/bjsj', component: ()=>import('../page/bjsj.vue')},
+      { path: '', component: ()=>import('../page/bjsj.vue')},
       {
       	path:'/sjsj',
       	component:()=>import('../page/sjsj.vue')
